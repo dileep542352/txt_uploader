@@ -68,24 +68,8 @@ import random
 keyboard = InlineKeyboardMarkup(
     [
         [
-            InlineKeyboardButton("FOLLOW " ,url="https://www.instagram.com/nikhil.saini.khe"),
-            InlineKeyboardButton("✜ NIKHIL SAINI ✜" ,url="https://t.me/Nikhil_saini_khe"),
-        ],
-        [
-            InlineKeyboardButton("✜ 𝐉𝐨𝐢𝐧 𝐔𝐩𝐃𝐚𝐭𝐞 Group 🥱✜" ,url=f"https://t.me/+taZCy5OkoMUwNzI9"),
-        ],
-    ]
-)
-
-# Inline keyboard for busy status
-Busy = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton("FOLLOW " ,url="https://www.instagram.com/nikhil.saini.khe"),
-            InlineKeyboardButton("✜ NIKHIL SAINI ✜" ,url="https://t.me/Nikhil_saini_khe"),
-        ],
-        [
-            InlineKeyboardButton("✜ 𝐉𝐨𝐢𝐧 𝐔𝐩𝐃𝐚𝐭𝐞 Group 🥱✜" ,url=f"https://t.me/+taZCy5OkoMUwNzI9"),
+            InlineKeyboardButton("FOLLOW " ,url="https://www.instagram.com/sunnyleone"),
+            InlineKeyboardButton("✜ SONU ✜" ,url="https://t.me/Sonu_saini_khe"),
         ],
     ]
 )
@@ -111,11 +95,11 @@ async def start_command(bot: Client, message: Message):
     # Caption for the image
     caption = (
         "**𝐇𝐞𝐥𝐥𝐨 𝐃𝐞𝐚𝐫 👋!**\n\n"
-        "➠ **𝐈 𝐚𝐦 𝐚 𝐓𝐞𝐱𝐭 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫 𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 By SLAYERXCORP**\n"
+        "➠ **𝐈 𝐚𝐦 𝐚 𝐓𝐞𝐱𝐭 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫 𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 By SONU**\n"
         "➠ **Can Extract Videos & PDFs From Your Text File and Upload to Telegram!**\n"
         "➠ **For Guide Use Command /guide 📖**\n\n"
         "➠ **Use /leech Command to Download From TXT File** 📄\n\n"
-        "➠ **𝐌𝐚𝐝𝐞 𝐁𝐲:** @slayerxcorp"
+        "➠ **𝐌𝐚𝐝𝐞 𝐁𝐲:** @sonu"
     )
 
     # Send the image with caption and buttons
@@ -171,252 +155,14 @@ async def cookies_handler(client: Client, m: Message):
         await m.reply_text(f"⚠️ An error occurred: {str(e)}")
 
 
-# File paths
-SUBSCRIPTION_FILE = "subscription_data.txt"
-CHANNELS_FILE = "channels_data.json"
-
-# Admin ID
-YOUR_ADMIN_ID = 6530997270
-
-# Function to read subscription data
-def read_subscription_data():
-    if not os.path.exists(SUBSCRIPTION_FILE):
-        return []
-    with open(SUBSCRIPTION_FILE, "r") as f:
-        return [line.strip().split(",") for line in f.readlines()]
-
-
-# Function to read channels data
-def read_channels_data():
-    if not os.path.exists(CHANNELS_FILE):
-        return []
-    with open(CHANNELS_FILE, "r") as f:
-        return json.load(f)
-
-
-# Function to write subscription data
-def write_subscription_data(data):
-    with open(SUBSCRIPTION_FILE, "w") as f:
-        for user in data:
-            f.write(",".join(user) + "\n")
-
-
-# Function to write channels data
-def write_channels_data(data):
-    with open(CHANNELS_FILE, "w") as f:
-        json.dump(data, f, indent=4)
-
-
-# Admin-only decorator
-def admin_only(func):
-    async def wrapper(client, message: Message):
-        if message.from_user.id != YOUR_ADMIN_ID:
-            await message.reply_text("You are not authorized to use this command.")
-            return
-        await func(client, message)
-    return wrapper
-
-# How to use:-
-@bot.on_message(filters.command("guide"))
-async def guide_handler(client: Client, message: Message):
-    guide_text = (
-        "🔑 **How to get started with Premium**:\n\n"
-        "1. **First of all**, contact the owner and buy a premium plan. 💰\n"
-        "2. **If you are a premium user**, you can check your plan by using `/myplan`. 🔍\n\n"
-        "📖 **Usage**:\n\n"
-        "1. `/add_channel -100{channel_id}` - Add a channel to the bot.\n"
-        "2. `/remove_channel -100{channel_id}` - Remove a channel from the bot.\n"
-        "3. `/saini .txt` file command - Process the .txt file.\n"
-        "4. `/stop` - Stop the task running in the bot. 🚫\n\n"
-        "If you have any questions, feel free to ask! 💬"
-    )
-    await message.reply_text(guide_text)
-
-# 1. /adduser
-@bot.on_message(filters.command("adduser") & filters.private)
-@admin_only
-async def add_user(client, message: Message):
-    try:
-        _, user_id, expiration_date = message.text.split()
-        subscription_data = read_subscription_data()
-        subscription_data.append([user_id, expiration_date])
-        write_subscription_data(subscription_data)
-        await message.reply_text(f"User {user_id} added with expiration date {expiration_date}.")
-    except ValueError:
-        await message.reply_text("Invalid command format. Use: /adduser <user_id> <expiration_date>")
-
-
-# 2. /removeuser
-@bot.on_message(filters.command("removeuser") & filters.private)
-@admin_only
-async def remove_user(client, message: Message):
-    try:
-        _, user_id = message.text.split()
-        subscription_data = read_subscription_data()
-        subscription_data = [user for user in subscription_data if user[0] != user_id]
-        write_subscription_data(subscription_data)
-        await message.reply_text(f"User {user_id} removed.")
-    except ValueError:
-        await message.reply_text("Invalid command format. Use: /removeuser <user_id>")
-
-YOUR_ADMIN_ID = 6530997270
-
-# Helper function to check admin privilege
-def is_admin(user_id):
-    return user_id == YOUR_ADMIN_ID
-
-# Command to show all users (Admin only)
-@bot.on_message(filters.command("users") & filters.private)
-async def show_users(client, message: Message):
-    user_id = message.from_user.id
-
-    if not is_admin(user_id):
-        await message.reply_text("❌ You are not authorized to use this command.")
-        return
-
-    subscription_data = read_subscription_data()
-    
-    if subscription_data:
-        users_list = "\n".join(
-            [f"{idx + 1}. User ID: `{user[0]}`, Expiration Date: `{user[1]}`" for idx, user in enumerate(subscription_data)]
-        )
-        await message.reply_text(f"**👥 Current Subscribed Users:**\n\n{users_list}")
-    else:
-        await message.reply_text("ℹ️ No users found in the subscription data.")
-
-# 3. /myplan
-@bot.on_message(filters.command("myplan") & filters.private)
-async def my_plan(client, message: Message):
-    user_id = str(message.from_user.id)
-    subscription_data = read_subscription_data()  # Make sure this function is implemented elsewhere
-
-    # Define YOUR_ADMIN_ID somewhere in your code
-    if user_id == str(YOUR_ADMIN_ID):  # YOUR_ADMIN_ID should be an integer
-        await message.reply_text("**✨ You have permanent access!**")
-    elif any(user[0] == user_id for user in subscription_data):  # Assuming subscription_data is a list of [user_id, expiration_date]
-        expiration_date = next(user[1] for user in subscription_data if user[0] == user_id)
-        await message.reply_text(
-            f"**📅 Your Premium Plan Status**\n\n"
-            f"**🆔 User ID**: `{user_id}`\n"
-            f"**⏳ Expiration Date**: `{expiration_date}`\n"
-            f"**🔒 Status**: *Active*"
-        )
-    else:
-        await message.reply_text("**❌ You are not a premium user.**")
-
-# 4. /add_channel
-@bot.on_message(filters.command("add_channel"))
-async def add_channel(client, message: Message):
-    user_id = str(message.from_user.id)
-    subscription_data = read_subscription_data()
-
-    if not any(user[0] == user_id for user in subscription_data):
-        await message.reply_text("You are not a premium user.")
-        return
-
-    try:
-        _, channel_id = message.text.split()
-        channels = read_channels_data()
-        if channel_id not in channels:
-            channels.append(channel_id)
-            write_channels_data(channels)
-            await message.reply_text(f"Channel {channel_id} added.")
-        else:
-            await message.reply_text(f"Channel {channel_id} is already added.")
-    except ValueError:
-        await message.reply_text("Invalid command format. Use: /add_channel <channel_id>")
-
-
-# 5. /remove_channels
-@bot.on_message(filters.command("remove_channel"))
-async def remove_channel(client, message: Message):
-    user_id = str(message.from_user.id)
-    subscription_data = read_subscription_data()
-
-    if not any(user[0] == user_id for user in subscription_data):
-        await message.reply_text("You are not a premium user.")
-        return
-
-    try:
-        _, channel_id = message.text.split()
-        channels = read_channels_data()
-        if channel_id in channels:
-            channels.remove(channel_id)
-            write_channels_data(channels)
-            await message.reply_text(f"Channel {channel_id} removed.")
-        else:
-            await message.reply_text(f"Channel {channel_id} is not in the list.")
-    except ValueError:
-        await message.reply_text("Invalid command format. Use: /remove_channels <channel_id>")
-
-YOUR_ADMIN_ID = 6530997270
-
-# Helper function to check admin privilege
-def is_admin(user_id):
-    return user_id == YOUR_ADMIN_ID
-
-# Command to show all allowed channels (Admin only)
-@bot.on_message(filters.command("allowed_channels"))
-async def allowed_channels(client, message: Message):
-    user_id = message.from_user.id
-
-    if not is_admin(user_id):
-        await message.reply_text("❌ You are not authorized to use this command.")
-        return
-
-    channels = read_channels_data()
-    if channels:
-        channels_list = "\n".join([f"- {channel}" for channel in channels])
-        await message.reply_text(f"**📋 Allowed Channels:**\n\n{channels_list}")
-    else:
-        await message.reply_text("ℹ️ No channels are currently allowed.")
-
-# Command to remove all channels (Admin only)
-@bot.on_message(filters.command("remove_all_channels"))
-async def remove_all_channels(client, message: Message):
-    user_id = message.from_user.id
-
-    if not is_admin(user_id):
-        await message.reply_text("❌ You are not authorized to use this command.")
-        return
-
-    # Clear the channels data
-    write_channels_data([])
-    await message.reply_text("✅ **All channels have been removed successfully.**")
-
-
 # 6. /stop
 @bot.on_message(filters.command("stop"))
 async def stop_handler(client, message: Message):
-    if message.chat.type == "private":
-        user_id = str(message.from_user.id)
-        subscription_data = read_subscription_data()
-        if not any(user[0] == user_id for user in subscription_data):
-            await message.reply_text("😔 You are not a premium user. Please subscribe to get access! 🔒")
-            return
-    else:
-        channels = read_channels_data()
-        if str(message.chat.id) not in channels:
-            await message.reply_text("🚫 You are not a premium user. Subscribe to unlock all features! ✨")
-            return
-
     await message.reply_text("♦️ 𝐒𝐭𝐨𝐩𝐩𝐞𝐝 Baby💞 ♦️" , True)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 @bot.on_message(filters.command("leech"))
 async def moni_handler(client: Client, m: Message):
-    if m.chat.type == "private":
-        user_id = str(m.from_user.id)
-        subscription_data = read_subscription_data()
-        if not any(user[0] == user_id for user in subscription_data):
-            await m.reply_text("❌ You are not a premium user. Please upgrade your subscription! 💎")
-            return
-    else:
-        channels = read_channels_data()
-        if str(m.chat.id) not in channels:
-            await m.reply_text("❗ You are not a premium user. Subscribe now for exclusive access! 🚀")
-            return
-            
     editable = await m.reply_text('𝐓𝐨 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝 𝐀 𝐓𝐱𝐭 𝐅𝐢𝐥𝐞 𝐒𝐞𝐧𝐝 𝐇𝐞𝐫𝐞 ⏍')
 
     try:
@@ -509,7 +255,7 @@ async def moni_handler(client: Client, m: Message):
     # Default credit message
     credit = "️ ⁪⁬⁮⁮⁮"
     if raw_text3 == '1':
-        CR = '@slayerxcorp'
+        CR = '@sonu'
     elif raw_text3:
         CR = raw_text3
     else:
@@ -674,7 +420,7 @@ async def moni_handler(client: Client, m: Message):
                           
                 else:
                     Show = f"❊⟱ 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐢𝐧𝐠 ⟱❊ »\n\n📄 Title:- `{name}\n\n⌨ 𝐐𝐮𝐥𝐢𝐭𝐲 » {raw_text2}`\n\n**🔗 𝐔𝐑𝐋 »** `{url}`"
-                    prog = await m.reply_text(f"**Downloading:-**\n\n**📄 Title:-** `{name}\n\nQuality - {raw_text2}`\n\n**Link:**`{url}`\n\n**Bot Made By SLAYERXCORP **")
+                    prog = await m.reply_text(f"**Downloading:-**\n\n**📄 Title:-** `{name}\n\nQuality - {raw_text2}`\n\n**Link:**`{url}`\n\n**Bot Made By SONU **")
                     res_file = await helper.download_video(url, cmd, name)
                     filename = res_file
                     await prog.delete(True)
